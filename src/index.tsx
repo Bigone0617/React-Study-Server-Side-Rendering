@@ -3,13 +3,23 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './App.css'
+
+const initialDataDom = document.querySelector('#initial-data');
+let data: string = '';
+if (initialDataDom !== null) {
+  const dataJson = initialDataDom.getAttribute('data-json');
+  if (dataJson !== null) {
+    data = dataJson;
+  }
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <App>{data}</App>
   </React.StrictMode>
 );
 

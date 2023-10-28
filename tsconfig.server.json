@@ -1,0 +1,16 @@
+// tsconfig.server.json
+{
+    "compilerOptions": {
+      "outDir": "build-server",
+      "module": "commonjs",
+      "target": "es6",
+      "noImplicitAny": false,
+      "sourceMap": true,
+      "jsx": "react",
+      "moduleResolution": "node",
+      "baseUrl": "src",
+      "esModuleInterop": true,
+    }
+  }
+
+// build하면 import 부분에서 에러가 남 : https://pewww.tistory.com/26 -> esModuleInterop 추가
