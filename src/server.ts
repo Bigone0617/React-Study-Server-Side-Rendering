@@ -7,6 +7,7 @@ import * as React from 'react';
 import * as ReactDOMServer from 'react-dom/server';
 
 import App from './App';
+import { StaticRouter } from 'react-router-dom/server';
 
 const app = express();
 
@@ -30,16 +31,25 @@ staticFiles.forEach(file => {
 });
 
 app.get('*', (req, res) => {
-    console.log(req.url);
     const html = path.join(__dirname, '../build/index.html');
     const htmlData = fs.readFileSync(html).toString();
 
+    const context: {url?: string}  = {};
 
-    // App.tsx에 child 전달하기
-    const ReactApp = ReactDOMServer.renderToString(React.createElement(App, {}, req.url));
-    // root 밖에 요소를 그리도록 하기 : root안에서 그리고 check-sum이 같아 server side에서 렌더한 부분이 csr에 의해 덥어 써짐.
-    const renderedHtml = htmlData.replace('<div id="root">{{SSR}}</div>', `<div id="root">${ReactApp}</div><script id="initial-data" type="text/plain" data-json="${req.url}"></script>`);
-    res.status(200).send(renderedHtml);
+    const ReactApp = ReactDOMServer.renderToString(
+        React.createElement(
+            StaticRouter,
+            {location: req.url},
+            React.createElement(App)
+        )
+    );
+    
+    if (context.url) {
+        res.redirect(301, '/');
+    } else {
+        const renderedHtml = htmlData.replace('{{SSR}}', ReactApp);
+        res.status(200).send(renderedHtml);
+    }
 });
 
 server.listen(3000);

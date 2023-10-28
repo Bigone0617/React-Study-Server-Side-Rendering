@@ -1,25 +1,38 @@
-import React, { Children } from 'react';
+import * as React from 'react';
+import {Routes, Route, Link, Navigate} from 'react-router-dom';
 
-function App({...props}) {
+const Home = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-      <img src="/logo.svg" className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-        </a>
-        {/* server.ts에서 전달 받은 child 그리기 */}
-        {props.children}
-      </header>
+    <div>
+      <h2>Home</h2>
+      <p><Link to="/">Home</Link></p>
+      <p><Link to="/hello">Hello</Link></p>
+      <p><Link to="/hi">Hi</Link></p>
     </div>
   );
+};
+
+const Hello = () => {
+  return (
+    <div>
+      <h2>Hello</h2>
+      <p><Link to="/">Home</Link></p>
+      <p><Link to="/hello">Hello</Link></p>
+      <p><Link to="/hi">Hi</Link></p>
+    </div>
+  );
+};
+
+class App extends React.Component<{}, {}> {
+  render() {
+    return (
+        <Routes>
+          <Route path="/" element={<Home/>} />
+          <Route path="/hello" element={<Hello/>} />
+          <Route path="*" element={<Navigate to="/"></Navigate>} />
+        </Routes>
+    );
+  }
 }
 
 export default App;
